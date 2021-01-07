@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 const contentful = require("contentful");
 const client = contentful.createClient({
-    space: "pfxeoi3onkep",
-    accessToken: "IOYdRXdO40wnkInTBGdpXMBbjUiWm4U1-fdOYtLp738"
+    space: "...",
+    accessToken: "..."
 });
 
 const getContenfulStuff = async () => {
