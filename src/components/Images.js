@@ -1,29 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 const contentful = require("contentful");
 const client = contentful.createClient({
-    space: "...",
-    accessToken: "..."
+    space: process.env.REACT_APP_CONTENTFUL_SPACE,
+    accessToken: process.env.REACT_APP_CONTENTFUL_KEY
 });
 
-const getContenfulStuff = async () => {
-    const response = await client.getEntries()
-    return response
-}
 
 
+const Image = (props) =>{
 
-const Image =  (props) =>{
+    let [resp, setResp] = useState('')
 
-    let [resp, setResp] = useState(0)
-
-    const getResponse = async () => {
-        const r = await getContenfulStuff()
-        setResp(r)
-    }
+    useEffect(()=>{
+        const getContenfulStuff = async () => {
+            const response = await client.getEntries()
+            const parseData = client.parseEntries(response)
+            const respImage = (await parseData).items[0].fields.image.fields.file.url
+            //extract necessary data
+            //set that specific data to state
+            console.log(respImage)
+            
+            setResp(respImage)
+        }
+        getContenfulStuff()
+    }, [])
 
     return (
         <div>
-            <h1>{resp}</h1>
+            <img src={resp} />
         </div>
     )
 }
