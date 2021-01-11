@@ -16,21 +16,27 @@ const Image = (props) =>{
             const response = await client.getEntries()
             const parseData = client.parseEntries(response)
             const respArray = (await parseData).items
+            const cleanArray = await respArray.map((value) =>{
+                return (
+                    [value.fields.title, 
+                    value.fields.image.fields.file.url,
+                    value.fields.description])
+            })
             //extract necessary data
             //set that specific data to state
-            console.log(respArray)
+            console.log(cleanArray)
             
-            setResp(respArray)        
-            for (const [index, value] of resp){
-                items.push(
-                    <div className="image_wrap">
-                        <p className="title">{value.fields.title}</p>
-                        <img src={value.fields.image.fields.file.url} alt="" />
-                        <p class="description">{value.fields.description}</p>
-                    </div>
-                )
-            }
-            console.log(items)
+            setResp(cleanArray)        
+            // for (const [index, value] of resp){
+            //     items.push(
+            //         <div className="image_wrap">
+            //             <p className="title">{value.fields.title}</p>
+            //             <img src={value.fields.image.fields.file.url} alt="" />
+            //             <p class="description">{value.fields.description}</p>
+            //         </div>
+            //     )
+            // }
+            // console.log(items)
         }
         getContenfulStuff()
 
@@ -38,7 +44,15 @@ const Image = (props) =>{
 
     return (
         <div className="image_container">
-            {items}
+            {resp.map((value) =>{
+                return (
+                    <div className="image_wrap">
+                        <p className="title">{value[0]}</p>
+                        <img src={value[1]} alt="" />
+                        <p class="description">{value[2]}</p>
+                    </div>
+                )
+            })}
         </div>
     )
 }
