@@ -9,25 +9,36 @@ const client = contentful.createClient({
 
 const Image = (props) =>{
 
-    let [resp, setResp] = useState('')
-
+    let [resp, setResp] = useState([])
+    const items = []
     useEffect(()=>{
         const getContenfulStuff = async () => {
             const response = await client.getEntries()
             const parseData = client.parseEntries(response)
-            const respImage = (await parseData).items[0].fields.image.fields.file.url
+            const respArray = (await parseData).items
             //extract necessary data
             //set that specific data to state
-            console.log(respImage)
+            console.log(respArray)
             
-            setResp(respImage)
+            setResp(respArray)        
+            for (const [index, value] of resp){
+                items.push(
+                    <div className="image_wrap">
+                        <p className="title">{value.fields.title}</p>
+                        <img src={value.fields.image.fields.file.url} alt="" />
+                        <p class="description">{value.fields.description}</p>
+                    </div>
+                )
+            }
+            console.log(items)
         }
         getContenfulStuff()
+
     }, [])
 
     return (
-        <div>
-            <img src={resp} />
+        <div className="image_container">
+            {items}
         </div>
     )
 }
@@ -37,6 +48,6 @@ export default Image
 /*
 
             <h1>{resp.items.sys.fields.title}</h1>
-            <h1>{typeof resp.items.sys.fields.image}</h1>
+            <h1>{typeof resp.items.fields.image.fields.file.url</h1>
             <h1>{resp.items.sys.fields.title}</h1>
 */
